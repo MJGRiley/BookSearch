@@ -13,7 +13,7 @@ const server = new ApolloServer({
   context: authMiddleware,
 })
 
-server.start().then(() => {
+// server.start().then(() => {
   server.applyMiddleware({ app });
 
   app.use(express.urlencoded({ extended: false }));
@@ -34,4 +34,4 @@ server.start().then(() => {
       console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`)
     })
   })
-})
+// })
