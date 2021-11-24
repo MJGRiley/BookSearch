@@ -9,9 +9,9 @@ import { REMOVE_BOOK } from "../utils/mutations"
 import { removeBookId } from "../utils/localStorage"
 
 const SavedBooks = () => {
-  const { loading,data } = useQuery(GET_ME)
+  const { loading, data } = useQuery(GET_ME);
   const [ removeBook ] = useMutation(REMOVE_BOOK)
-  const userData = data?.me || []
+  const userData = data?.me || {};
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -22,8 +22,7 @@ const SavedBooks = () => {
     }
 
     try {
-      await removeBook({ variables: { bookId }})
-
+      const { data } = await removeBook({ variables: { bookId }})
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -40,17 +39,17 @@ const SavedBooks = () => {
     <>
       <Jumbotron fluid className='text-light bg-dark'>
         <Container>
-          <h1>Viewing saved books!</h1>
+          <h1>Viewing {userData.username}'s books!</h1>
         </Container>
       </Jumbotron>
       <Container>
         <h2>
-          {userData.savedBooks.length
+          {userData.savedBooks?.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
         <CardColumns>
-          {userData.savedBooks.map((book) => {
+          {userData.savedBooks?.map((book) => {
             return (
               <Card key={book.bookId} border='dark'>
                 {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
